@@ -1,0 +1,85 @@
+Stash:
+======
+- Create personal repository
+  - Browse to sw-stash.freescale.net
+  -  (far right pulldown) "View Profile"
+  - "Create repository"
+  - After repository is created, click on it and you should
+    be presented with a page with "Files" and "Settings" tabs.
+  - "Settings" tabs allows you to set permissions.
+
+- Add ssh keys, so you don't have to enter your password everytime.
+  (https://confluence.atlassian.com/display/STASH0210/Using+SSH+keys+to+secure+Git+operations)
+  - Create keys if you need to:
+    (https://confluence.atlassian.com/display/STASH0210/Creating+SSH+keys) 
+  - If you already have keys,
+    From homepage, goto "Manage Account" (far right pulldown)
+    "SSH Keys"-> Add Key and cut and paste id_rsa.pub from .ssh to the text box and
+    hit "Add Key"
+    
+
+Git:
+(https://confluence.atlassian.com/display/STASH2012/Basic+Git+commands) for nice
+summary of commands.
+
+- After creating a repository using Stash (see Stash: above),
+  you can use git commands on your client to push changes
+  to the repository.
+
+   - Clone a repo:
+     git clone http://RTCW50@sw-stash.freescale.net/~rtcw50/git_test.git
+  
+   - Start working on a file
+     vi <file>
+
+   - Add a file
+     git add <file>|--all
+
+   - Commit to your local repo
+     git commit -m "comments"
+
+   - Push to server
+     git push origin master 
+
+- Push a change with ssh command.
+   - git commit -m "added some changes" <file>
+   - git remote set-url origin ssh://git@sw-stash.freescale.net/~rtcw50/git_test.git (note -- no scm path)
+   - git push origin master
+
+Hints:
+Created in git_test2:
+Diff a staged file with the same modified one:
+
+git diff -- <file>
+
+master: commit A
+
+test_branch1: commit 1
+
+master: commit B B
+
+test_branch1: commit2
+
+test_branch1: commit3
+
+master:test_branch1 synchronized.
+
+test_branch1: commit4
+
+test_branch1: commit5
+
+test_branch1: commit6
+
+test_branch1: commit7
+
+master: 1
+
+master: 2
+
+dev1: added this line
+
+master: added new line
+
+master: another line
+
+master: another line
