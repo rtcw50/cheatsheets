@@ -1,0 +1,27 @@
+General:
+--------
+
+-mllvm -debug-pass=Structure ; show passes and dependencies
+-mllvm -print-after-all  ; print dumps after every pass
+-mllvm -print-after-all -mllvm -filter-print-funcs=<funcname> ; only <funcname>
+-mllvm -debug      ; print DEBUG stmts (dbg(...))
+-mllvm -stats
+-mllvm -debug-only=<passname>
+
+Disable optimization on a function
+-----------------------------------
+__attribute__((optname)) <function definition> OR
+ [[ gnu::optimize(o)]]
+
+Disable inlining on a func:
+---------------------------
+function_name(args) __attribute__((noinline))
+
+Loop Stuff:
+-----------
+
+#pragma clang loop unroll (disable)
+
+-fno-unroll-loops
+
+

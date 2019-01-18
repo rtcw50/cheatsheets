@@ -1,0 +1,2 @@
+-fdump-tree-gimple
+-fdump-tree-all
