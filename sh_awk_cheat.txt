@@ -1,0 +1,206 @@
+Bash/Awk Cheatsheet
+===================
+
+Basics:
+
+Comments: 
+#
+
+Interpreter (first line): 
+#! /bin/bash
+
+Variables:
+name=value                    set name to value
+name=$(command arguments)     set name to output of command
+echo ${name##*<str>}          
+  deletes the longest match of <str> from front of name 
+echo ${name#*<str>}           
+  deletes the shortest match of <str> from front of name
+echo ${name%%.*}              
+  deletes the longest match of substring (.any chars) from the back of name 
+echo ${name%.*}               
+  deletes the shortest match of substring (.any char) from the back of name
+echo ${name:0:3}              chars 0-2 in $name
+
+
+Arrays:
+Indexed Array
+ARR=([0]=val [1]=val2) or ARR=(val val2)
+
+Associative Array
+declare -A ARR  -- required
+ARR=(["key1"]=value1 ["key2"]=value2)
+
+val=${ARR[0]}
+${name[@]} or ${name[*]} -- all members of name
+${#name[0]} -- length of value at subscript 0
+${!prefix@} -- list of variable whose name starts with prefix
+${!name[@]} -- list of array keys.
+
+
+Builtin Variables:
+$1-$N 	Represents positional arg passed to shell program from the command line.
+$? 	Exit value of the last fg command that was executed.
+$! 	Exit value of the last bg command that was executed.
+$0 	First word of the entered command (the name of the shell program).
+$* 	All the arguments that were entered on the command line ($1 $2 ...).
+"$@" 	Arguments that were entered on the command line, individually quoted ("$1" "$2" ...).
+$#      Number of arguments passed on command line 
+$$      Current PID of shell
+$_      Absolute pathname used to invoke the shell
+
+
+Tests:
+test expr or [ expr ]
+
+Numeric Compare:
+2 -eq 1
+-ge
+-gt
+-le
+-lt
+-ne
+
+String Compare:
+
+"str" = "str2"
+"str != "str2"
+"str" true if "str" not null
+-n $str true if length of $str > 0
+-z $str true if length of $str == 0 
+
+File Compare:
+
+-d file    true if file is a dir
+-f file    true if file is a regular file
+-r file    true if file is readable
+-s file    true if file is not zero length
+-w file    true if file is writable
+-x file    true if file is executable
+
+Expr Compare:
+
+!expr     true if expr is false
+expr1 -a expr2  true if expr1 AND expr2 are true
+expr1 -o expr2  true if expr1 OR expr2 is true
+
+Flow Control:
+
+if [ expr ]; then
+fi
+
+if [ expr ]; then
+ stmt;
+else
+ stmt;
+fi
+
+if [ expr ]; then
+ stmt
+elif
+ stmt
+else
+ stmt
+fi
+
+case str1 in 
+ str1)
+ commands;;
+ str2)
+ commands;;
+ *)
+ default commands;;
+esac
+
+Loops:
+
+for VAR in list; do
+ commands
+done
+
+while [ expr ]; do
+ commands
+done
+
+until [ expr ]; do
+ commands
+done
+
+Functions:
+
+func_name(arg1, arg2) {
+	local var
+	commands
+}
+
+call with: func_name arg1 arg2
+
+Arithmetic:
+let i=$i+1
+
+j=0
+((j=$j+1))
+
+
+Useful Commands:
+
+dirname        directory name of argument
+basename       basename of argument
+shift          shift positional parameters
+
+Useful Awk
+
+k=echo $line | awk '{split ($1,a,"."); print a[1]; exit}'
+
+> outfile 2>&1 redirect stdout/stderr to outfile
+
+Examples:
+
+#! /bin/bash
+
+
+echo "\$0 is $0"
+echo "\$* is $*"
+echo "\$# is $#"
+echo -n "\"\$@\" is " 
+echo "$@"
+echo "\$1 is $1"
+
+
+# Arithmetic
+for h in a b c d; do
+	echo $h
+	let i=$i+1
+	j=$(( $j+1 )) 
+	echo "$i $j"
+done
+
+# Indexed and Associative Arrays
+cars=("ford" "chevy" "honda");
+cars2=([0]="ford2" [1]="chevy2" [2]="honda2");
+
+# declare -A required for associative arrays
+declare -A cars3
+cars3=(["ford"]="mustang:explorer" ["chevy"]="camaro:cruze" ["honda"]="insight:odyessey");
+
+# num elements in cars
+num=${#cars[@]}
+
+# Print cars array
+for i in ${cars[@]}; do
+	echo $i;
+done
+
+# Print cars2 array
+for i in ${cars2[*]}; do
+	echo $i;
+done
+
+# Print associative array
+# for each key in cars3
+for i in ${!cars3[@]}; do
+	# print 2nd field of value
+	fords=`echo ${cars3[$i]}  | awk '{split ($1,c,":");  print c[2]; exit}'`;
+	echo $fords
+	echo "key=$i value=${cars3[$i]}" 
+done
